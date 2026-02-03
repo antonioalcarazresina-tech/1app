@@ -1,4 +1,6 @@
 const STORAGE_KEY = "hytale-modpack";
+const SEARCH_URL =
+  "https://www.curseforge.com/hytale/search?page=1&pageSize=20&sortBy=relevancy&search=";
 
 const packNameInput = document.getElementById("pack-name");
 const packVersionInput = document.getElementById("pack-version");
@@ -7,7 +9,7 @@ const modNameInput = document.getElementById("mod-name");
 const modCategoryInput = document.getElementById("mod-category");
 const modVersionInput = document.getElementById("mod-version");
 const addButton = document.getElementById("add");
-const lookupButton = document.getElementById("lookup");
+const searchButton = document.getElementById("search");
 const modList = document.getElementById("mod-list");
 const counter = document.getElementById("counter");
 const exportButton = document.getElementById("export");
@@ -86,16 +88,7 @@ const createModElement = (mod, index) => {
     navigator.clipboard.writeText(mod.url).catch(() => null);
   });
 
-  const downloadButton = document.createElement("button");
-  downloadButton.className = "ghost";
-  downloadButton.textContent = "Descargar";
-  downloadButton.disabled = !mod.downloadUrl;
-  downloadButton.addEventListener("click", () => {
-    if (!mod.downloadUrl) return;
-    window.open(mod.downloadUrl, "_blank", "noopener");
-  });
-
-  actions.append(removeButton, copyButton, downloadButton);
+  actions.append(removeButton, copyButton);
   item.append(title, meta, actions);
   return item;
 };
@@ -119,46 +112,31 @@ const parseModInput = (value) => {
   };
 };
 
-const addMod = (override = {}) => {
+const addMod = () => {
   const base = parseModInput(modNameInput.value);
   if (!base.name) return;
   state.mods.unshift({
     ...base,
     category: modCategoryInput.value.trim(),
     version: modVersionInput.value.trim(),
-    ...override,
   });
   modNameInput.value = "";
   modCategoryInput.value = "";
   modVersionInput.value = "";
   renderMods();
   saveState();
+  setStatus("Mod añadido. Puedes pegar otro enlace si lo deseas.", "success");
 };
 
-const lookupMod = async () => {
-  const input = modNameInput.value.trim();
-  if (!input) {
-    setStatus("Añade un enlace o slug de CurseForge.", "warning");
+const openSearch = () => {
+  const query = modNameInput.value.trim();
+  if (!query) {
+    setStatus("Añade una palabra clave para buscar en CurseForge.", "warning");
     return;
   }
-  setStatus("Buscando en CurseForge...", "info");
-  try {
-    const response = await fetch(`/api/curseforge/resolve?input=${encodeURIComponent(input)}`);
-    const payload = await response.json();
-    if (!response.ok) {
-      setStatus(payload.error || "No se pudo obtener el mod.", "error");
-      return;
-    }
-    addMod({
-      name: payload.name,
-      url: payload.websiteUrl || input,
-      source: "CurseForge",
-      downloadUrl: payload.downloadUrl,
-    });
-    setStatus(`Mod "${payload.name}" añadido.`, "success");
-  } catch (error) {
-    setStatus("Error al conectar con CurseForge.", "error");
-  }
+  const url = `${SEARCH_URL}${encodeURIComponent(query)}`;
+  window.open(url, "_blank", "noopener");
+  setStatus("Se abrió CurseForge en otra pestaña.", "info");
 };
 
 const exportModpack = () => {
@@ -178,14 +156,15 @@ const clearList = () => {
   state.mods = [];
   renderMods();
   saveState();
+  setStatus("Lista vaciada.", "warning");
 };
 
 [packNameInput, packVersionInput, packNotesInput].forEach((input) => {
   input.addEventListener("input", saveState);
 });
 
-addButton.addEventListener("click", () => addMod());
-lookupButton.addEventListener("click", lookupMod);
+addButton.addEventListener("click", addMod);
+searchButton.addEventListener("click", openSearch);
 modNameInput.addEventListener("keydown", (event) => {
   if (event.key === "Enter") {
     addMod();
@@ -199,4 +178,4 @@ packNameInput.value = state.pack.name;
 packVersionInput.value = state.pack.version;
 packNotesInput.value = state.pack.notes;
 renderMods();
-setStatus("Configura CURSEFORGE_API_KEY para habilitar búsquedas.", "info");
+setStatus("Busca el mod en CurseForge y pega su enlace aquí.", "info");

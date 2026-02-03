@@ -43,10 +43,12 @@
 
           <div class="panel-card">
             <h2>Añadir mod desde CurseForge</h2>
-            <p class="hint">Pega el enlace o el slug del mod y lo buscamos en la API.</p>
+            <p class="hint">
+              Escribe una palabra clave y abre la búsqueda en CurseForge. Copia el enlace del mod que elijas.
+            </p>
             <div class="field">
-              <label for="mod-name">Enlace o slug</label>
-              <input type="text" id="mod-name" placeholder="https://www.curseforge.com/..." />
+              <label for="mod-name">Palabra clave, enlace o slug</label>
+              <input type="text" id="mod-name" placeholder="Ej: minimap" />
             </div>
             <div class="field inline">
               <div>
@@ -60,7 +62,7 @@
             </div>
             <div class="panel-actions">
               <button class="secondary" id="add">Añadir manualmente</button>
-              <button class="ghost" id="lookup">Buscar en CurseForge</button>
+              <button class="ghost" id="search">Buscar en CurseForge</button>
             </div>
             <div class="status" id="status" aria-live="polite"></div>
           </div>
@@ -87,7 +89,7 @@
 
       <footer>
         <p>
-          Para descargar mods desde CurseForge necesitas configurar una API key en el servidor.
+          El buscador abre CurseForge en otra pestaña. Luego pega el enlace del mod que te interese.
         </p>
       </footer>
     </div>

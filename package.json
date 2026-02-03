@@ -1,7 +1,7 @@
 {
   "name": "1app",
-  "version": "1.1.0",
-  "description": "Creador de modpacks de Hytale con integración opcional de CurseForge.",
+  "version": "1.2.0",
+  "description": "Creador de modpacks de Hytale con búsqueda manual en CurseForge.",
   "private": true,
   "scripts": {
     "dev": "node server.js",
