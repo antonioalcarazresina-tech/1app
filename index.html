@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Hytale Mod Downloader</title>
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; background: #1a1a1a; color: #eee; margin: 0; padding: 20px; }
+    .container { max-width: 800px; margin: auto; }
+    .search-box { display: flex; gap: 10px; margin-bottom: 30px; }
+    input { flex: 1; padding: 12px; border-radius: 5px; border: none; background: #333; color: white; }
+    button { padding: 10px 20px; background: #ff6b00; border: none; color: white; cursor: pointer; border-radius: 5px; font-weight: bold; }
+    button:hover { background: #e66000; }
+    .mod-card { background: #2a2a2a; padding: 15px; border-radius: 8px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #333; }
+    .mod-info h3 { margin: 0; font-size: 18px; color: #ff6b00; }
+    .mod-info p { margin: 5px 0 0; font-size: 13px; color: #aaa; }
+    #status { font-style: italic; color: #888; margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Hytale Mod Manager</h1>
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Ej: Magic, Swords, Furniture...">
+      <button id="searchBtn">Buscar</button>
+    </div>
+    <div id="status"></div>
+    <div id="results"></div>
+  </div>
+
+  <script src="renderer.js"></script>
+</body>
+</html>
