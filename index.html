@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hytale Modpack Creator</title>
+    <link rel="stylesheet" href="style.css" />
+    <script defer src="main.js"></script>
+  </head>
+  <body>
+    <div class="app">
+      <header class="hero">
+        <div>
+          <p class="pill">Creador de modpacks</p>
+          <h1>Hytale Modpack Creator</h1>
+          <p class="subtitle">
+            Organiza tus mods de CurseForge en un solo modpack. Añade, etiqueta y exporta tu lista en segundos.
+          </p>
+        </div>
+        <div class="hero-actions">
+          <button class="primary" id="export">Exportar modpack</button>
+          <button class="ghost" id="clear">Vaciar lista</button>
+        </div>
+      </header>
+
+      <main class="layout">
+        <section class="panel">
+          <div class="panel-card">
+            <h2>Datos del modpack</h2>
+            <div class="field">
+              <label for="pack-name">Nombre</label>
+              <input type="text" id="pack-name" placeholder="Ej: Survival con amigos" />
+            </div>
+            <div class="field">
+              <label for="pack-version">Versión objetivo de Hytale</label>
+              <input type="text" id="pack-version" placeholder="Ej: 1.0.0" />
+            </div>
+            <div class="field">
+              <label for="pack-notes">Notas</label>
+              <textarea id="pack-notes" rows="4" placeholder="Describe el enfoque del modpack..."></textarea>
+            </div>
+          </div>
+
+          <div class="panel-card">
+            <h2>Importar modpack</h2>
+            <p class="hint">
+              Carga un archivo JSON exportado anteriormente o pega el contenido para continuar tu trabajo.
+            </p>
+            <div class="field">
+              <label for="import-file">Archivo JSON</label>
+              <input type="file" id="import-file" accept="application/json" />
+            </div>
+            <div class="field">
+              <label for="import-text">Pegar JSON</label>
+              <textarea
+                id="import-text"
+                rows="4"
+                placeholder='{"pack":{"name":"Mi pack"},"mods":[...]}'
+              ></textarea>
+            </div>
+            <div class="panel-actions">
+              <button class="secondary" id="import">Importar modpack</button>
+              <button class="ghost" id="import-clear">Limpiar importación</button>
+            </div>
+            <p class="microcopy">La importación reemplaza los datos actuales del modpack.</p>
+          </div>
+
+          <div class="panel-card">
+            <h2>Añadir mod desde CurseForge</h2>
+            <p class="hint">
+              Escribe una palabra clave y abre la búsqueda en CurseForge. Copia el enlace del mod que elijas.
+            </p>
+            <div class="field">
+              <label for="mod-name">Palabra clave, enlace o slug</label>
+              <input type="text" id="mod-name" placeholder="Ej: minimap" />
+            </div>
+            <div class="field inline">
+              <div>
+                <label for="mod-category">Categoría</label>
+                <input type="text" id="mod-category" placeholder="Exploración, UI, QoL..." />
+              </div>
+              <div>
+                <label for="mod-version">Versión</label>
+                <input type="text" id="mod-version" placeholder="Ej: 2.3.1" />
+              </div>
+            </div>
+            <div class="panel-actions">
+              <button class="secondary" id="add">Añadir manualmente</button>
+              <button class="ghost" id="search">Buscar en CurseForge</button>
+            </div>
+            <div class="status" id="status" aria-live="polite"></div>
+          </div>
+        </section>
+
+        <aside class="panel">
+          <div class="panel-card">
+            <div class="panel-header">
+              <h2>Mods añadidos</h2>
+              <span class="counter" id="counter">0 mods</span>
+            </div>
+            <ul class="mod-list" id="mod-list"></ul>
+          </div>
+          <div class="panel-card highlight">
+            <h2>Checklist de lanzamiento</h2>
+            <ul class="checklist">
+              <li>Confirma compatibilidad con la versión de Hytale.</li>
+              <li>Revisa dependencias entre mods.</li>
+              <li>Comparte el export con tu equipo.</li>
+            </ul>
+          </div>
+        </aside>
+      </main>
+
+      <footer>
+        <p>
+          El buscador abre CurseForge en otra pestaña. Luego pega el enlace del mod que te interese.
+        </p>
+      </footer>
+    </div>
+  </body>
+</html>
