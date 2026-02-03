@@ -76,6 +76,11 @@ button:hover {
   transform: translateY(-1px);
 }
 
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
 .primary {
   background: #f8f9ff;
   color: #0f62fe;
@@ -172,6 +177,35 @@ textarea {
   color: #5a6b7b;
 }
 
+.panel-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.status {
+  padding: 10px 12px;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  background: #f5f7fb;
+  color: #52606d;
+}
+
+.status[data-tone="success"] {
+  background: #e6fffa;
+  color: #065f46;
+}
+
+.status[data-tone="warning"] {
+  background: #fffbea;
+  color: #92400e;
+}
+
+.status[data-tone="error"] {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
 .mod-list {
   list-style: none;
   padding: 0;
@@ -204,6 +238,7 @@ textarea {
 .mod-actions {
   display: flex;
   gap: 8px;
+  flex-wrap: wrap;
 }
 
 .mod-actions button {

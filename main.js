@@ -7,10 +7,12 @@ const modNameInput = document.getElementById("mod-name");
 const modCategoryInput = document.getElementById("mod-category");
 const modVersionInput = document.getElementById("mod-version");
 const addButton = document.getElementById("add");
+const lookupButton = document.getElementById("lookup");
 const modList = document.getElementById("mod-list");
 const counter = document.getElementById("counter");
 const exportButton = document.getElementById("export");
 const clearButton = document.getElementById("clear");
+const statusBox = document.getElementById("status");
 
 const state = {
   pack: {
@@ -19,6 +21,11 @@ const state = {
     notes: "",
   },
   mods: [],
+};
+
+const setStatus = (message, tone = "info") => {
+  statusBox.textContent = message;
+  statusBox.dataset.tone = tone;
 };
 
 const saveState = () => {
@@ -79,7 +86,16 @@ const createModElement = (mod, index) => {
     navigator.clipboard.writeText(mod.url).catch(() => null);
   });
 
-  actions.append(removeButton, copyButton);
+  const downloadButton = document.createElement("button");
+  downloadButton.className = "ghost";
+  downloadButton.textContent = "Descargar";
+  downloadButton.disabled = !mod.downloadUrl;
+  downloadButton.addEventListener("click", () => {
+    if (!mod.downloadUrl) return;
+    window.open(mod.downloadUrl, "_blank", "noopener");
+  });
+
+  actions.append(removeButton, copyButton, downloadButton);
   item.append(title, meta, actions);
   return item;
 };
@@ -103,19 +119,46 @@ const parseModInput = (value) => {
   };
 };
 
-const addMod = () => {
+const addMod = (override = {}) => {
   const base = parseModInput(modNameInput.value);
   if (!base.name) return;
   state.mods.unshift({
     ...base,
     category: modCategoryInput.value.trim(),
     version: modVersionInput.value.trim(),
+    ...override,
   });
   modNameInput.value = "";
   modCategoryInput.value = "";
   modVersionInput.value = "";
   renderMods();
   saveState();
+};
+
+const lookupMod = async () => {
+  const input = modNameInput.value.trim();
+  if (!input) {
+    setStatus("Añade un enlace o slug de CurseForge.", "warning");
+    return;
+  }
+  setStatus("Buscando en CurseForge...", "info");
+  try {
+    const response = await fetch(`/api/curseforge/resolve?input=${encodeURIComponent(input)}`);
+    const payload = await response.json();
+    if (!response.ok) {
+      setStatus(payload.error || "No se pudo obtener el mod.", "error");
+      return;
+    }
+    addMod({
+      name: payload.name,
+      url: payload.websiteUrl || input,
+      source: "CurseForge",
+      downloadUrl: payload.downloadUrl,
+    });
+    setStatus(`Mod "${payload.name}" añadido.`, "success");
+  } catch (error) {
+    setStatus("Error al conectar con CurseForge.", "error");
+  }
 };
 
 const exportModpack = () => {
@@ -141,7 +184,8 @@ const clearList = () => {
   input.addEventListener("input", saveState);
 });
 
-addButton.addEventListener("click", addMod);
+addButton.addEventListener("click", () => addMod());
+lookupButton.addEventListener("click", lookupMod);
 modNameInput.addEventListener("keydown", (event) => {
   if (event.key === "Enter") {
     addMod();
@@ -155,3 +199,4 @@ packNameInput.value = state.pack.name;
 packVersionInput.value = state.pack.version;
 packNotesInput.value = state.pack.notes;
 renderMods();
+setStatus("Configura CURSEFORGE_API_KEY para habilitar búsquedas.", "info");

@@ -43,9 +43,9 @@
 
           <div class="panel-card">
             <h2>Añadir mod desde CurseForge</h2>
-            <p class="hint">Pega el enlace o el nombre del mod. Guardamos la referencia para tu export.</p>
+            <p class="hint">Pega el enlace o el slug del mod y lo buscamos en la API.</p>
             <div class="field">
-              <label for="mod-name">Nombre o enlace</label>
+              <label for="mod-name">Enlace o slug</label>
               <input type="text" id="mod-name" placeholder="https://www.curseforge.com/..." />
             </div>
             <div class="field inline">
@@ -58,7 +58,11 @@
                 <input type="text" id="mod-version" placeholder="Ej: 2.3.1" />
               </div>
             </div>
-            <button class="secondary" id="add">Añadir mod</button>
+            <div class="panel-actions">
+              <button class="secondary" id="add">Añadir manualmente</button>
+              <button class="ghost" id="lookup">Buscar en CurseForge</button>
+            </div>
+            <div class="status" id="status" aria-live="polite"></div>
           </div>
         </section>
 
@@ -83,7 +87,7 @@
 
       <footer>
         <p>
-          Exporta tu lista en JSON y llévala a tu gestor de mods. Esta herramienta no descarga mods automáticamente.
+          Para descargar mods desde CurseForge necesitas configurar una API key en el servidor.
         </p>
       </footer>
     </div>
