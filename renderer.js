@@ -10,9 +10,16 @@ searchBtn.addEventListener('click', async () => {
   statusDiv.innerText = 'Buscando en CurseForge...';
   resultsDiv.innerHTML = '';
 
-  const mods = await window.api.searchMods(query);
+  const response = await window.api.searchMods(query);
 
-  if (mods.length === 0) {
+  if (response.error) {
+    statusDiv.innerText = response.error;
+    return;
+  }
+
+  const mods = response.data;
+
+  if (!mods || mods.length === 0) {
     statusDiv.innerText = 'No se encontraron mods.';
     return;
   }
@@ -24,14 +31,14 @@ searchBtn.addEventListener('click', async () => {
     card.className = 'mod-card';
 
     // Obtenemos el archivo más reciente
-    const latestFile = mod.latestFiles[0];
+    const latestFile = mod.latestFiles?.[0];
 
     card.innerHTML = `
       <div class="mod-info">
         <h3>${mod.name}</h3>
         <p>${mod.summary}</p>
       </div>
-      <button onclick="descargar('${latestFile.downloadUrl}', '${latestFile.fileName}')">
+      <button ${latestFile?.downloadUrl ? '' : 'disabled'} onclick="descargar('${latestFile?.downloadUrl}', '${latestFile?.fileName}')">
         Instalar
       </button>
     `;
@@ -40,6 +47,11 @@ searchBtn.addEventListener('click', async () => {
 });
 
 async function descargar(url, fileName) {
+  if (!url || !fileName) {
+    statusDiv.innerText = 'No hay archivo disponible para descargar.';
+    return;
+  }
+
   statusDiv.innerText = `Iniciando descarga de: ${fileName}...`;
   const resultado = await window.api.downloadMod(url, fileName);
   statusDiv.innerText = resultado;

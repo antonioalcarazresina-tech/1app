@@ -24,8 +24,13 @@ app.whenReady().then(createWindow);
 // --- LÓGICA DE CURSEFORGE ---
 
 const API_KEY = '$2a$10$TU_API_KEY_AQUI'; // <--- PON TU KEY DE CURSEFORGE AQUÍ
+const HAS_API_KEY = API_KEY && !API_KEY.includes('TU_API_KEY_AQUI');
 
 ipcMain.handle('search-mods', async (event, query) => {
+  if (!HAS_API_KEY) {
+    return { error: 'Falta configurar la API Key de CurseForge.' };
+  }
+
   try {
     const response = await axios.get('https://api.curseforge.com/v1/mods/search', {
       headers: { 'x-api-key': API_KEY },
@@ -35,14 +40,18 @@ ipcMain.handle('search-mods', async (event, query) => {
         pageSize: 15
       }
     });
-    return response.data.data;
+    return { data: response.data.data };
   } catch (error) {
     console.error('Error en API:', error);
-    return [];
+    return { error: 'No se pudo consultar la API de CurseForge.' };
   }
 });
 
 ipcMain.handle('download-mod', async (event, { url, fileName }) => {
+  if (!HAS_API_KEY) {
+    return 'Falta configurar la API Key de CurseForge.';
+  }
+
   try {
     // Definimos la carpeta de mods en los documentos del usuario
     const modsFolder = path.join(app.getPath('documents'), 'Hytale_Mods');
