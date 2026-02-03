@@ -1,69 +1,157 @@
-const timerDisplay = document.getElementById("timer");
-const toggleButton = document.getElementById("toggle");
-const pauseButton = document.getElementById("pause");
-const resetButton = document.getElementById("reset");
-const startSessionButton = document.getElementById("start-session");
-const checklist = document.getElementById("checklist");
-const newItemInput = document.getElementById("new-item");
+const STORAGE_KEY = "hytale-modpack";
+
+const packNameInput = document.getElementById("pack-name");
+const packVersionInput = document.getElementById("pack-version");
+const packNotesInput = document.getElementById("pack-notes");
+const modNameInput = document.getElementById("mod-name");
+const modCategoryInput = document.getElementById("mod-category");
+const modVersionInput = document.getElementById("mod-version");
 const addButton = document.getElementById("add");
+const modList = document.getElementById("mod-list");
+const counter = document.getElementById("counter");
+const exportButton = document.getElementById("export");
+const clearButton = document.getElementById("clear");
 
-const DEFAULT_MINUTES = 25;
-let remainingSeconds = DEFAULT_MINUTES * 60;
-let intervalId = null;
-
-const formatTime = (seconds) => {
-  const mins = String(Math.floor(seconds / 60)).padStart(2, "0");
-  const secs = String(seconds % 60).padStart(2, "0");
-  return `${mins}:${secs}`;
+const state = {
+  pack: {
+    name: "",
+    version: "",
+    notes: "",
+  },
+  mods: [],
 };
 
-const updateDisplay = () => {
-  timerDisplay.textContent = formatTime(remainingSeconds);
+const saveState = () => {
+  state.pack.name = packNameInput.value.trim();
+  state.pack.version = packVersionInput.value.trim();
+  state.pack.notes = packNotesInput.value.trim();
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
 };
 
-const startTimer = () => {
-  if (intervalId) return;
-  intervalId = window.setInterval(() => {
-    if (remainingSeconds > 0) {
-      remainingSeconds -= 1;
-      updateDisplay();
-      return;
-    }
-    stopTimer();
-  }, 1000);
-};
-
-const stopTimer = () => {
-  if (!intervalId) return;
-  window.clearInterval(intervalId);
-  intervalId = null;
-};
-
-const resetTimer = () => {
-  stopTimer();
-  remainingSeconds = DEFAULT_MINUTES * 60;
-  updateDisplay();
-};
-
-const addChecklistItem = () => {
-  const value = newItemInput.value.trim();
-  if (!value) return;
-  const item = document.createElement("li");
-  item.textContent = value;
-  checklist.appendChild(item);
-  newItemInput.value = "";
-  newItemInput.focus();
-};
-
-toggleButton.addEventListener("click", startTimer);
-startSessionButton.addEventListener("click", startTimer);
-pauseButton.addEventListener("click", stopTimer);
-resetButton.addEventListener("click", resetTimer);
-addButton.addEventListener("click", addChecklistItem);
-newItemInput.addEventListener("keydown", (event) => {
-  if (event.key === "Enter") {
-    addChecklistItem();
+const loadState = () => {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (!raw) return;
+  try {
+    const parsed = JSON.parse(raw);
+    state.pack = parsed.pack ?? state.pack;
+    state.mods = parsed.mods ?? [];
+  } catch (error) {
+    console.error("Error al cargar el modpack", error);
   }
+};
+
+const updateCounter = () => {
+  counter.textContent = `${state.mods.length} mod${state.mods.length === 1 ? "" : "s"}`;
+};
+
+const createModElement = (mod, index) => {
+  const item = document.createElement("li");
+  item.className = "mod-item";
+
+  const title = document.createElement("h3");
+  title.textContent = mod.name;
+
+  const meta = document.createElement("div");
+  meta.className = "mod-meta";
+  meta.innerHTML = `
+    <span>Versión: ${mod.version || "N/D"}</span>
+    <span>Categoría: ${mod.category || "Sin etiqueta"}</span>
+    <span>Fuente: ${mod.source || "Manual"}</span>
+  `;
+
+  const actions = document.createElement("div");
+  actions.className = "mod-actions";
+
+  const removeButton = document.createElement("button");
+  removeButton.className = "secondary";
+  removeButton.textContent = "Quitar";
+  removeButton.addEventListener("click", () => {
+    state.mods.splice(index, 1);
+    renderMods();
+    saveState();
+  });
+
+  const copyButton = document.createElement("button");
+  copyButton.className = "ghost";
+  copyButton.textContent = "Copiar enlace";
+  copyButton.addEventListener("click", () => {
+    if (!mod.url) return;
+    navigator.clipboard.writeText(mod.url).catch(() => null);
+  });
+
+  actions.append(removeButton, copyButton);
+  item.append(title, meta, actions);
+  return item;
+};
+
+const renderMods = () => {
+  modList.innerHTML = "";
+  state.mods.forEach((mod, index) => {
+    modList.appendChild(createModElement(mod, index));
+  });
+  updateCounter();
+};
+
+const parseModInput = (value) => {
+  const trimmed = value.trim();
+  if (!trimmed) return { name: "" };
+  const isUrl = /^https?:\/\//.test(trimmed);
+  return {
+    name: isUrl ? trimmed.split("/").pop()?.replace(/-/g, " ") || trimmed : trimmed,
+    url: isUrl ? trimmed : "",
+    source: isUrl ? "CurseForge" : "Manual",
+  };
+};
+
+const addMod = () => {
+  const base = parseModInput(modNameInput.value);
+  if (!base.name) return;
+  state.mods.unshift({
+    ...base,
+    category: modCategoryInput.value.trim(),
+    version: modVersionInput.value.trim(),
+  });
+  modNameInput.value = "";
+  modCategoryInput.value = "";
+  modVersionInput.value = "";
+  renderMods();
+  saveState();
+};
+
+const exportModpack = () => {
+  saveState();
+  const blob = new Blob([JSON.stringify(state, null, 2)], {
+    type: "application/json",
+  });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `${state.pack.name || "hytale-modpack"}.json`;
+  link.click();
+  URL.revokeObjectURL(url);
+};
+
+const clearList = () => {
+  state.mods = [];
+  renderMods();
+  saveState();
+};
+
+[packNameInput, packVersionInput, packNotesInput].forEach((input) => {
+  input.addEventListener("input", saveState);
 });
 
-updateDisplay();
+addButton.addEventListener("click", addMod);
+modNameInput.addEventListener("keydown", (event) => {
+  if (event.key === "Enter") {
+    addMod();
+  }
+});
+exportButton.addEventListener("click", exportModpack);
+clearButton.addEventListener("click", clearList);
+
+loadState();
+packNameInput.value = state.pack.name;
+packVersionInput.value = state.pack.version;
+packNotesInput.value = state.pack.notes;
+renderMods();

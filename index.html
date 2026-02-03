@@ -3,50 +3,88 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>1app • Panel de enfoque</title>
+    <title>Hytale Modpack Creator</title>
     <link rel="stylesheet" href="style.css" />
     <script defer src="main.js"></script>
   </head>
   <body>
     <div class="app">
       <header class="hero">
-        <p class="pill">Nueva versión</p>
-        <h1>1app vuelve a estar en línea</h1>
-        <p class="subtitle">
-          Una app web sencilla, rápida y lista para arrancar sin fricciones.
-        </p>
+        <div>
+          <p class="pill">Creador de modpacks</p>
+          <h1>Hytale Modpack Creator</h1>
+          <p class="subtitle">
+            Organiza tus mods de CurseForge en un solo modpack. Añade, etiqueta y exporta tu lista en segundos.
+          </p>
+        </div>
         <div class="hero-actions">
-          <button class="primary" id="start-session">Iniciar sesión de enfoque</button>
-          <button class="ghost" id="reset">Reiniciar</button>
+          <button class="primary" id="export">Exportar modpack</button>
+          <button class="ghost" id="clear">Vaciar lista</button>
         </div>
       </header>
 
-      <section class="panel">
-        <div class="panel-card">
-          <h2>Sesión en curso</h2>
-          <div class="timer" id="timer">25:00</div>
-          <p class="hint">Haz clic en “Iniciar” para comenzar un sprint de 25 minutos.</p>
-          <div class="panel-actions">
-            <button class="primary" id="toggle">Iniciar</button>
-            <button class="secondary" id="pause">Pausar</button>
+      <main class="layout">
+        <section class="panel">
+          <div class="panel-card">
+            <h2>Datos del modpack</h2>
+            <div class="field">
+              <label for="pack-name">Nombre</label>
+              <input type="text" id="pack-name" placeholder="Ej: Survival con amigos" />
+            </div>
+            <div class="field">
+              <label for="pack-version">Versión objetivo de Hytale</label>
+              <input type="text" id="pack-version" placeholder="Ej: 1.0.0" />
+            </div>
+            <div class="field">
+              <label for="pack-notes">Notas</label>
+              <textarea id="pack-notes" rows="4" placeholder="Describe el enfoque del modpack..."></textarea>
+            </div>
           </div>
-        </div>
-        <div class="panel-card">
-          <h2>Checklist rápida</h2>
-          <ul class="checklist" id="checklist">
-            <li>Configurar el objetivo principal del día</li>
-            <li>Eliminar distracciones clave</li>
-            <li>Revisar próximos pasos</li>
-          </ul>
-          <div class="panel-actions">
-            <input type="text" id="new-item" placeholder="Agregar nuevo paso..." />
-            <button class="secondary" id="add">Añadir</button>
+
+          <div class="panel-card">
+            <h2>Añadir mod desde CurseForge</h2>
+            <p class="hint">Pega el enlace o el nombre del mod. Guardamos la referencia para tu export.</p>
+            <div class="field">
+              <label for="mod-name">Nombre o enlace</label>
+              <input type="text" id="mod-name" placeholder="https://www.curseforge.com/..." />
+            </div>
+            <div class="field inline">
+              <div>
+                <label for="mod-category">Categoría</label>
+                <input type="text" id="mod-category" placeholder="Exploración, UI, QoL..." />
+              </div>
+              <div>
+                <label for="mod-version">Versión</label>
+                <input type="text" id="mod-version" placeholder="Ej: 2.3.1" />
+              </div>
+            </div>
+            <button class="secondary" id="add">Añadir mod</button>
           </div>
-        </div>
-      </section>
+        </section>
+
+        <aside class="panel">
+          <div class="panel-card">
+            <div class="panel-header">
+              <h2>Mods añadidos</h2>
+              <span class="counter" id="counter">0 mods</span>
+            </div>
+            <ul class="mod-list" id="mod-list"></ul>
+          </div>
+          <div class="panel-card highlight">
+            <h2>Checklist de lanzamiento</h2>
+            <ul class="checklist">
+              <li>Confirma compatibilidad con la versión de Hytale.</li>
+              <li>Revisa dependencias entre mods.</li>
+              <li>Comparte el export con tu equipo.</li>
+            </ul>
+          </div>
+        </aside>
+      </main>
 
       <footer>
-        <p>Listo para ejecutar: usa <strong>npm run dev</strong> y visita <strong>http://localhost:5173</strong>.</p>
+        <p>
+          Exporta tu lista en JSON y llévala a tu gestor de mods. Esta herramienta no descarga mods automáticamente.
+        </p>
       </footer>
     </div>
   </body>
