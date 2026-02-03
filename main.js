@@ -23,8 +23,8 @@ app.whenReady().then(createWindow);
 
 // --- LÓGICA DE CURSEFORGE ---
 
-const API_KEY = '$2a$10$TU_API_KEY_AQUI'; // <--- PON TU KEY DE CURSEFORGE AQUÍ
-const HAS_API_KEY = API_KEY && !API_KEY.includes('TU_API_KEY_AQUI');
+const API_KEY = process.env.CURSEFORGE_API_KEY;
+const HAS_API_KEY = Boolean(API_KEY);
 
 ipcMain.handle('search-mods', async (event, query) => {
   if (!HAS_API_KEY) {
