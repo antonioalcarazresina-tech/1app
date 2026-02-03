@@ -1,0 +1,349 @@
+:root {
+  color-scheme: dark;
+  font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+  background: radial-gradient(circle at top, #0b1d23 0%, #060b12 55%, #04070c 100%);
+  color: #e5f2ff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  padding: 48px 24px 72px;
+  background: radial-gradient(circle at 15% 10%, rgba(66, 175, 210, 0.2), transparent 55%),
+    radial-gradient(circle at 85% 0%, rgba(93, 187, 108, 0.25), transparent 50%),
+    radial-gradient(circle at 50% 110%, rgba(18, 87, 133, 0.25), transparent 50%);
+  background-color: #04070c;
+}
+
+.app {
+  width: min(100%, 1100px);
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.hero {
+  background: linear-gradient(135deg, rgba(20, 70, 88, 0.96), rgba(12, 33, 53, 0.95)),
+    radial-gradient(circle at top right, rgba(82, 196, 123, 0.6), transparent 55%);
+  color: #f5fbff;
+  padding: 34px;
+  border-radius: 28px;
+  border: 1px solid rgba(92, 181, 202, 0.4);
+  box-shadow: 0 20px 60px rgba(4, 10, 18, 0.6), inset 0 0 30px rgba(51, 146, 168, 0.35);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: -40% 55% auto -20%;
+  height: 140%;
+  background: radial-gradient(circle, rgba(115, 208, 160, 0.4), transparent 60%);
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.pill {
+  display: inline-flex;
+  background: rgba(10, 41, 56, 0.8);
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  margin: 0 0 12px;
+  border: 1px solid rgba(92, 181, 202, 0.4);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.hero h1 {
+  margin: 0 0 8px;
+  font-size: clamp(2.2rem, 3vw, 3.2rem);
+  text-shadow: 0 8px 24px rgba(6, 24, 35, 0.8);
+}
+
+.subtitle {
+  margin: 0;
+  font-size: 1.1rem;
+  max-width: 560px;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+button {
+  border: none;
+  border-radius: 999px;
+  padding: 12px 20px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+button:hover {
+  transform: translateY(-1px);
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.primary {
+  background: linear-gradient(135deg, #e4f7ff, #b6e4ff);
+  color: #0b3b4f;
+  box-shadow: 0 10px 24px rgba(12, 50, 70, 0.5);
+}
+
+.secondary {
+  background: linear-gradient(135deg, #2a7cc8, #2fbf71);
+  color: #f4fffb;
+  box-shadow: 0 10px 20px rgba(13, 40, 58, 0.4);
+}
+
+.ghost {
+  background: rgba(8, 26, 40, 0.6);
+  border: 1px solid rgba(92, 181, 202, 0.5);
+  color: #e6f9ff;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  gap: 24px;
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.panel-card {
+  background: rgba(10, 21, 34, 0.9);
+  padding: 24px;
+  border-radius: 20px;
+  border: 1px solid rgba(82, 130, 154, 0.25);
+  box-shadow: 0 20px 50px rgba(3, 8, 14, 0.7);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  backdrop-filter: blur(6px);
+}
+
+.panel-card.highlight {
+  background: rgba(11, 38, 56, 0.92);
+  border: 1px solid rgba(82, 196, 123, 0.45);
+}
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.counter {
+  font-size: 0.9rem;
+  color: #a3b6c9;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.field.inline {
+  flex-direction: row;
+  gap: 16px;
+}
+
+.field.inline > div {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #cfe7f5;
+}
+
+input,
+textarea {
+  border-radius: 12px;
+  border: 1px solid rgba(82, 130, 154, 0.4);
+  padding: 10px 12px;
+  font-size: 1rem;
+  font-family: inherit;
+  background: rgba(7, 15, 24, 0.8);
+  color: #e5f2ff;
+}
+
+input:focus,
+textarea:focus {
+  outline: 2px solid rgba(96, 190, 216, 0.7);
+  border-color: rgba(96, 190, 216, 0.7);
+}
+
+input[type="file"] {
+  padding: 8px 12px;
+  color: #cfe7f5;
+}
+
+input[type="file"]::file-selector-button {
+  margin-right: 12px;
+  border: none;
+  border-radius: 999px;
+  padding: 8px 14px;
+  background: linear-gradient(135deg, #2a7cc8, #2fbf71);
+  color: #f4fffb;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+textarea {
+  resize: vertical;
+}
+
+.hint {
+  margin: 0;
+  color: #a6bfd3;
+}
+
+.microcopy {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #92a9bd;
+}
+
+.panel-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.status {
+  padding: 10px 12px;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  background: rgba(12, 26, 38, 0.9);
+  color: #c7d7e6;
+  border: 1px solid rgba(82, 130, 154, 0.35);
+}
+
+.status[data-tone="success"] {
+  background: rgba(47, 191, 113, 0.15);
+  color: #8cf0c2;
+  border-color: rgba(47, 191, 113, 0.45);
+}
+
+.status[data-tone="warning"] {
+  background: rgba(245, 199, 66, 0.12);
+  color: #ffd57a;
+  border-color: rgba(245, 199, 66, 0.4);
+}
+
+.status[data-tone="error"] {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ff9b9b;
+  border-color: rgba(239, 68, 68, 0.5);
+}
+
+.mod-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 12px;
+}
+
+.mod-item {
+  border-radius: 16px;
+  padding: 14px;
+  background: rgba(8, 18, 28, 0.85);
+  border: 1px solid rgba(82, 130, 154, 0.25);
+  display: grid;
+  gap: 8px;
+}
+
+.mod-item h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.mod-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: #a5bdd2;
+}
+
+.mod-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.mod-actions button {
+  border-radius: 10px;
+  padding: 6px 12px;
+  font-size: 0.85rem;
+}
+
+.checklist {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.checklist li {
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(12, 26, 38, 0.8);
+  border: 1px solid rgba(82, 130, 154, 0.3);
+}
+
+footer {
+  text-align: center;
+  color: #a3b6c9;
+}
+
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  body {
+    padding: 32px 16px 48px;
+  }
+
+  .hero {
+    padding: 24px;
+  }
+
+  .field.inline {
+    flex-direction: column;
+  }
+}
