@@ -1,8 +1,8 @@
 :root {
-  color-scheme: light;
+  color-scheme: dark;
   font-family: "Inter", "Segoe UI", system-ui, sans-serif;
-  background: #f5f7fb;
-  color: #102a43;
+  background: radial-gradient(circle at top, #0a1b2d, #030509 55%, #020305 100%);
+  color: #e3edf6;
 }
 
 * {
@@ -15,6 +15,9 @@ body {
   display: flex;
   justify-content: center;
   padding: 40px 24px 64px;
+  background: radial-gradient(circle at 20% 10%, rgba(35, 130, 255, 0.2), transparent 55%),
+    radial-gradient(circle at 80% 0%, rgba(0, 255, 170, 0.18), transparent 45%),
+    #030509;
 }
 
 .app {
@@ -25,35 +28,52 @@ body {
 }
 
 .hero {
-  background: linear-gradient(135deg, #0f62fe, #7b61ff);
-  color: #f8f9ff;
+  background: linear-gradient(135deg, rgba(21, 45, 80, 0.95), rgba(20, 90, 120, 0.85));
+  color: #f4f8ff;
   padding: 32px;
   border-radius: 24px;
-  box-shadow: 0 16px 40px rgba(15, 98, 254, 0.25);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(68, 150, 255, 0.35);
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   gap: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 85% 30%, rgba(86, 255, 196, 0.3), transparent 45%);
+  opacity: 0.7;
+  pointer-events: none;
 }
 
 .pill {
   display: inline-flex;
-  background: rgba(255, 255, 255, 0.2);
+  background: rgba(7, 11, 19, 0.75);
+  border: 1px solid rgba(120, 200, 255, 0.35);
   padding: 6px 14px;
   border-radius: 999px;
   font-size: 0.85rem;
   margin: 0 0 12px;
+  box-shadow: 0 0 12px rgba(77, 184, 255, 0.3);
 }
 
 .hero h1 {
   margin: 0 0 8px;
-  font-size: clamp(2rem, 3vw, 3rem);
+  font-size: clamp(2.1rem, 3vw, 3.2rem);
+  letter-spacing: 1px;
+  text-shadow: 0 4px 14px rgba(41, 170, 255, 0.35);
 }
 
 .subtitle {
   margin: 0;
   font-size: 1.1rem;
   max-width: 560px;
+  color: rgba(227, 237, 246, 0.8);
 }
 
 .hero-actions {
@@ -82,20 +102,21 @@ button:disabled {
 }
 
 .primary {
-  background: #f8f9ff;
-  color: #0f62fe;
-  box-shadow: 0 8px 16px rgba(15, 98, 254, 0.25);
+  background: linear-gradient(135deg, #f5fbff, #d3f0ff);
+  color: #0b2a4c;
+  box-shadow: 0 10px 20px rgba(77, 184, 255, 0.35);
 }
 
 .secondary {
-  background: #0f62fe;
+  background: linear-gradient(135deg, #1c7ef2, #22c7a9);
   color: #f8f9ff;
+  box-shadow: 0 8px 18px rgba(36, 186, 170, 0.3);
 }
 
 .ghost {
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  color: #f8f9ff;
+  background: rgba(6, 10, 18, 0.6);
+  border: 1px solid rgba(120, 200, 255, 0.5);
+  color: #e3edf6;
 }
 
 .layout {
@@ -111,18 +132,21 @@ button:disabled {
 }
 
 .panel-card {
-  background: #ffffff;
+  background: rgba(10, 17, 28, 0.85);
   padding: 24px;
   border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(15, 62, 143, 0.08);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(80, 120, 170, 0.25);
   display: flex;
   flex-direction: column;
   gap: 16px;
+  backdrop-filter: blur(8px);
 }
 
 .panel-card.highlight {
-  background: #f0f4ff;
-  border: 1px solid #d9e2ff;
+  background: rgba(7, 20, 24, 0.85);
+  border: 1px solid rgba(34, 199, 169, 0.35);
+  box-shadow: 0 12px 30px rgba(7, 20, 24, 0.5);
 }
 
 .panel-header {
@@ -133,7 +157,7 @@ button:disabled {
 
 .counter {
   font-size: 0.9rem;
-  color: #52606d;
+  color: rgba(227, 237, 246, 0.7);
 }
 
 .field {
@@ -157,15 +181,23 @@ button:disabled {
 label {
   font-weight: 600;
   font-size: 0.9rem;
+  color: rgba(227, 237, 246, 0.85);
 }
 
 input,
 textarea {
   border-radius: 12px;
-  border: 1px solid #d9e2ec;
+  border: 1px solid rgba(120, 200, 255, 0.3);
+  background: rgba(6, 10, 18, 0.8);
   padding: 10px 12px;
   font-size: 1rem;
+  color: #e3edf6;
   font-family: inherit;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: rgba(227, 237, 246, 0.45);
 }
 
 textarea {
@@ -174,7 +206,7 @@ textarea {
 
 .hint {
   margin: 0;
-  color: #5a6b7b;
+  color: rgba(227, 237, 246, 0.6);
 }
 
 .panel-actions {
@@ -187,23 +219,27 @@ textarea {
   padding: 10px 12px;
   border-radius: 12px;
   font-size: 0.9rem;
-  background: #f5f7fb;
-  color: #52606d;
+  background: rgba(10, 22, 32, 0.9);
+  color: rgba(227, 237, 246, 0.7);
+  border: 1px solid rgba(120, 200, 255, 0.2);
 }
 
 .status[data-tone="success"] {
-  background: #e6fffa;
-  color: #065f46;
+  background: rgba(8, 45, 38, 0.85);
+  color: #7ff3d4;
+  border-color: rgba(36, 199, 169, 0.4);
 }
 
 .status[data-tone="warning"] {
-  background: #fffbea;
-  color: #92400e;
+  background: rgba(58, 45, 12, 0.85);
+  color: #f5d76e;
+  border-color: rgba(245, 215, 110, 0.4);
 }
 
 .status[data-tone="error"] {
-  background: #fee2e2;
-  color: #991b1b;
+  background: rgba(60, 18, 18, 0.85);
+  color: #f3a3a3;
+  border-color: rgba(243, 163, 163, 0.4);
 }
 
 .mod-list {
@@ -217,9 +253,10 @@ textarea {
 .mod-item {
   border-radius: 16px;
   padding: 14px;
-  background: #f5f7fb;
+  background: rgba(7, 15, 26, 0.9);
   display: grid;
   gap: 8px;
+  border: 1px solid rgba(120, 200, 255, 0.2);
 }
 
 .mod-item h3 {
@@ -232,7 +269,7 @@ textarea {
   flex-wrap: wrap;
   gap: 8px;
   font-size: 0.85rem;
-  color: #52606d;
+  color: rgba(227, 237, 246, 0.6);
 }
 
 .mod-actions {
@@ -258,12 +295,13 @@ textarea {
 .checklist li {
   padding: 10px 12px;
   border-radius: 12px;
-  background: #ffffff;
+  background: rgba(8, 14, 24, 0.9);
+  border: 1px solid rgba(120, 200, 255, 0.2);
 }
 
 footer {
   text-align: center;
-  color: #5a6b7b;
+  color: rgba(227, 237, 246, 0.6);
 }
 
 @media (max-width: 900px) {
