@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>1app • Panel de enfoque</title>
+    <link rel="stylesheet" href="style.css" />
+    <script defer src="main.js"></script>
+  </head>
+  <body>
+    <div class="app">
+      <header class="hero">
+        <p class="pill">Nueva versión</p>
+        <h1>1app vuelve a estar en línea</h1>
+        <p class="subtitle">
+          Una app web sencilla, rápida y lista para arrancar sin fricciones.
+        </p>
+        <div class="hero-actions">
+          <button class="primary" id="start-session">Iniciar sesión de enfoque</button>
+          <button class="ghost" id="reset">Reiniciar</button>
+        </div>
+      </header>
+
+      <section class="panel">
+        <div class="panel-card">
+          <h2>Sesión en curso</h2>
+          <div class="timer" id="timer">25:00</div>
+          <p class="hint">Haz clic en “Iniciar” para comenzar un sprint de 25 minutos.</p>
+          <div class="panel-actions">
+            <button class="primary" id="toggle">Iniciar</button>
+            <button class="secondary" id="pause">Pausar</button>
+          </div>
+        </div>
+        <div class="panel-card">
+          <h2>Checklist rápida</h2>
+          <ul class="checklist" id="checklist">
+            <li>Configurar el objetivo principal del día</li>
+            <li>Eliminar distracciones clave</li>
+            <li>Revisar próximos pasos</li>
+          </ul>
+          <div class="panel-actions">
+            <input type="text" id="new-item" placeholder="Agregar nuevo paso..." />
+            <button class="secondary" id="add">Añadir</button>
+          </div>
+        </div>
+      </section>
+
+      <footer>
+        <p>Listo para ejecutar: usa <strong>npm run dev</strong> y visita <strong>http://localhost:5173</strong>.</p>
+      </footer>
+    </div>
+  </body>
+</html>

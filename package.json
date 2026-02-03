@@ -1,0 +1,10 @@
+{
+  "name": "1app",
+  "version": "1.0.0",
+  "description": "App web mínima para reiniciar 1app.",
+  "private": true,
+  "scripts": {
+    "dev": "python3 -m http.server 5173",
+    "start": "python3 -m http.server 5173"
+  }
+}
