@@ -8,23 +8,17 @@ const packNotesInput = document.getElementById("pack-notes");
 const modNameInput = document.getElementById("mod-name");
 const modCategoryInput = document.getElementById("mod-category");
 const modVersionInput = document.getElementById("mod-version");
-const modImageInput = document.getElementById("mod-image");
 const importFileInput = document.getElementById("import-file");
 const importTextInput = document.getElementById("import-text");
 const addButton = document.getElementById("add");
 const searchButton = document.getElementById("search");
 const importButton = document.getElementById("import");
 const importClearButton = document.getElementById("import-clear");
-const modFilterInput = document.getElementById("mod-filter");
-const modSortSelect = document.getElementById("mod-sort");
-const modCategories = document.getElementById("mod-categories");
+const modList = document.getElementById("mod-list");
 const counter = document.getElementById("counter");
-const exportSecondaryButton = document.getElementById("export-secondary");
+const exportButton = document.getElementById("export");
 const clearButton = document.getElementById("clear");
-const clearSecondaryButton = document.getElementById("clear-secondary");
 const statusBox = document.getElementById("status");
-const toggleButtons = document.querySelectorAll(".toggle-button");
-const toggleContents = document.querySelectorAll(".toggle-content");
 
 const state = {
   pack: {
@@ -38,19 +32,6 @@ const state = {
 const setStatus = (message, tone = "info") => {
   statusBox.textContent = message;
   statusBox.dataset.tone = tone;
-};
-
-const setTransferView = (target) => {
-  toggleButtons.forEach((button) => {
-    const isActive = button.dataset.target === target;
-    button.classList.toggle("is-active", isActive);
-    button.setAttribute("aria-selected", String(isActive));
-  });
-  toggleContents.forEach((panel) => {
-    const isActive = panel.dataset.content === target;
-    panel.classList.toggle("is-active", isActive);
-    panel.hidden = !isActive;
-  });
 };
 
 const saveState = () => {
@@ -76,111 +57,23 @@ const updateCounter = () => {
   counter.textContent = `${state.mods.length} mod${state.mods.length === 1 ? "" : "s"}`;
 };
 
-const getFilteredMods = () => {
-  const query = modFilterInput.value.trim().toLowerCase();
-  const mods = query
-    ? state.mods.filter((mod) => {
-        const name = mod.name?.toLowerCase() || "";
-        const category = mod.category?.toLowerCase() || "";
-        const version = mod.version?.toLowerCase() || "";
-        return name.includes(query) || category.includes(query) || version.includes(query);
-      })
-    : [...state.mods];
+const createModElement = (mod, index) => {
+  const item = document.createElement("li");
+  item.className = "mod-item";
 
-  const sort = modSortSelect.value;
-  if (sort === "name") {
-    mods.sort((a, b) => (a.name || "").localeCompare(b.name || ""));
-  }
-  if (sort === "category") {
-    mods.sort((a, b) => (a.category || "").localeCompare(b.category || ""));
-  }
-  return mods;
-};
-
-const renderMods = () => {
-  modCategories.innerHTML = "";
-  const filteredMods = getFilteredMods();
-  if (!filteredMods.length) {
-    const empty = document.createElement("div");
-    empty.className = "empty-state";
-    empty.textContent = state.mods.length
-      ? "No hay mods con ese filtro. Ajusta la búsqueda."
-      : "Aún no has añadido mods. Usa el buscador para empezar.";
-    modCategories.appendChild(empty);
-    updateCounter();
-    return;
-  }
-  const grouped = filteredMods.reduce((acc, mod, index) => {
-    const category = mod.category?.trim() || "Sin categoría";
-    if (!acc.has(category)) {
-      acc.set(category, []);
-    }
-    const originalIndex = state.mods.findIndex((item) => item === mod);
-    acc.get(category).push({ ...mod, index: originalIndex });
-    return acc;
-  }, new Map());
-
-  Array.from(grouped.entries()).forEach(([category, mods]) => {
-    const categoryBlock = document.createElement("div");
-    categoryBlock.className = "category-block";
-
-    const header = document.createElement("div");
-    header.className = "category-header";
-    header.innerHTML = `<h3>${category}</h3><span>${mods.length} mods</span>`;
-
-    const grid = document.createElement("div");
-    grid.className = "mod-grid";
-
-    mods.forEach((mod) => {
-      grid.appendChild(createModCard(mod, mod.index));
-    });
-
-    categoryBlock.append(header, grid);
-    modCategories.appendChild(categoryBlock);
-  });
-  updateCounter();
-};
-
-const createModCard = (mod, index) => {
-  const card = document.createElement("div");
-  card.className = "mod-card";
-
-  const header = document.createElement("div");
-  header.className = "mod-card-header";
-
-  const icon = document.createElement("div");
-  icon.className = "mod-icon";
-  if (mod.image) {
-    const img = document.createElement("img");
-    img.src = mod.image;
-    img.alt = `Logo de ${mod.name}`;
-    img.loading = "lazy";
-    icon.appendChild(img);
-  } else {
-    icon.textContent = mod.name.slice(0, 2).toUpperCase();
-  }
-
-  const info = document.createElement("div");
-  const title = document.createElement("h4");
+  const title = document.createElement("h3");
   title.textContent = mod.name;
-  const meta = document.createElement("p");
-  meta.className = "mod-meta";
-  meta.textContent = `Versión: ${mod.version || "N/D"} · Fuente: ${mod.source || "Manual"}`;
 
-  info.append(title, meta);
-  header.append(icon, info);
+  const meta = document.createElement("div");
+  meta.className = "mod-meta";
+  meta.innerHTML = `
+    <span>Versión: ${mod.version || "N/D"}</span>
+    <span>Categoría: ${mod.category || "Sin etiqueta"}</span>
+    <span>Fuente: ${mod.source || "Manual"}</span>
+  `;
 
   const actions = document.createElement("div");
   actions.className = "mod-actions";
-
-  const openButton = document.createElement("button");
-  openButton.className = "ghost";
-  openButton.textContent = "Abrir enlace";
-  openButton.disabled = !mod.url;
-  openButton.addEventListener("click", () => {
-    if (!mod.url) return;
-    window.open(mod.url, "_blank", "noopener");
-  });
 
   const removeButton = document.createElement("button");
   removeButton.className = "secondary";
@@ -194,15 +87,22 @@ const createModCard = (mod, index) => {
   const copyButton = document.createElement("button");
   copyButton.className = "ghost";
   copyButton.textContent = "Copiar enlace";
-  copyButton.disabled = !mod.url;
   copyButton.addEventListener("click", () => {
     if (!mod.url) return;
     navigator.clipboard.writeText(mod.url).catch(() => null);
   });
 
-  actions.append(openButton, copyButton, removeButton);
-  card.append(header, actions);
-  return card;
+  actions.append(removeButton, copyButton);
+  item.append(title, meta, actions);
+  return item;
+};
+
+const renderMods = () => {
+  modList.innerHTML = "";
+  state.mods.forEach((mod, index) => {
+    modList.appendChild(createModElement(mod, index));
+  });
+  updateCounter();
 };
 
 const parseModInput = (value) => {
@@ -223,12 +123,10 @@ const addMod = () => {
     ...base,
     category: modCategoryInput.value.trim(),
     version: modVersionInput.value.trim(),
-    image: modImageInput.value.trim(),
   });
   modNameInput.value = "";
   modCategoryInput.value = "";
   modVersionInput.value = "";
-  modImageInput.value = "";
   renderMods();
   saveState();
   setStatus("Mod añadido. Puedes pegar otro enlace si lo deseas.", "success");
@@ -272,7 +170,6 @@ const sanitizeImportedMod = (mod) => ({
   source: typeof mod?.source === "string" ? mod.source : "Importado",
   category: typeof mod?.category === "string" ? mod.category : "",
   version: typeof mod?.version === "string" ? mod.version : "",
-  image: typeof mod?.image === "string" ? mod.image : "",
 });
 
 const applyImportedState = (payload) => {
@@ -337,15 +234,8 @@ const clearImport = () => {
   input.addEventListener("input", saveState);
 });
 
-modFilterInput.addEventListener("input", renderMods);
-modSortSelect.addEventListener("change", renderMods);
 addButton.addEventListener("click", addMod);
 searchButton.addEventListener("click", openSearch);
-toggleButtons.forEach((button) => {
-  button.addEventListener("click", () => {
-    setTransferView(button.dataset.target);
-  });
-});
 importButton.addEventListener("click", () => {
   if (importTextInput.value.trim()) {
     importFromText();
@@ -364,9 +254,8 @@ modNameInput.addEventListener("keydown", (event) => {
     addMod();
   }
 });
-exportSecondaryButton.addEventListener("click", exportModpack);
+exportButton.addEventListener("click", exportModpack);
 clearButton.addEventListener("click", clearList);
-clearSecondaryButton.addEventListener("click", clearList);
 
 loadState();
 packNameInput.value = state.pack.name;
@@ -374,4 +263,3 @@ packVersionInput.value = state.pack.version;
 packNotesInput.value = state.pack.notes;
 renderMods();
 setStatus("Busca el mod en CurseForge y pega su enlace aquí.", "info");
-setTransferView("import");
