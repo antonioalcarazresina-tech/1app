@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mods seleccionados · Hytale Modpack Creator</title>
+    <link rel="stylesheet" href="style.css" />
+    <script defer src="mods.js"></script>
+  </head>
+  <body>
+    <div class="app">
+      <header class="page-header">
+        <div>
+          <p class="section-kicker">Vista detallada</p>
+          <h1>Mods seleccionados</h1>
+          <p class="subtitle">
+            Revisa cada mod con más información. Ideal para listas grandes sin perder la estructura.
+          </p>
+        </div>
+        <div class="hero-actions">
+          <a class="link-button" href="index.html">Volver al creador</a>
+        </div>
+      </header>
+
+      <section class="panel-card">
+        <div class="panel-header">
+          <div>
+            <h2>Listado completo</h2>
+            <p class="hint">Filtra y ordena para encontrar rápidamente cada mod.</p>
+          </div>
+          <span class="counter" id="detail-counter">0 mods</span>
+        </div>
+        <div class="panel-filters">
+          <div class="field">
+            <label for="detail-filter">Filtrar mods</label>
+            <input type="text" id="detail-filter" placeholder="Nombre, categoría o versión" />
+          </div>
+          <div class="field">
+            <label for="detail-sort">Ordenar por</label>
+            <select id="detail-sort">
+              <option value="recent">Más recientes</option>
+              <option value="name">Nombre (A-Z)</option>
+              <option value="category">Categoría (A-Z)</option>
+            </select>
+          </div>
+        </div>
+        <div class="detail-grid" id="detail-grid"></div>
+      </section>
+    </div>
+  </body>
+</html>
